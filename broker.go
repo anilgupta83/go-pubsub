@@ -65,6 +65,9 @@ func (b *Broker) Unsubscribe(s *Subscriber, topics ...string) {
 		delete(b.topics[topic], s.id)
 		b.tLock.Unlock()
 		s.RemoveTopic(topic)
+		if b.Subscribers(topic) < 1 {
+			delete(b.topics, topic)
+		}
 	}
 }
 
